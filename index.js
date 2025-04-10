@@ -49,7 +49,7 @@ app.delete("/tarefa/:id", (req,res)=>{
     db.run(`DELETE FROM Tarefas WHERE  id ==(?)`, [req.params.id])
 })
 
-app.get("home",(req,res)=>{
+app.get("/home",(req,res)=>{
     res.sendFile(path.join(__dirname,"index.html"))
 })
 //resposta enviada do arquivo, sendo index.html (o arquivo), root identifica o servidor da pasta raiz, dirname sendo o diretorio da pasta atual
