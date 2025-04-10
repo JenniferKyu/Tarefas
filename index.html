@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: plum;
+        }
+
+        h1 {
+            font-family: "Mea Culpa", cursive;
+            font-size: 70px;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            border-radius: 6px;
+            padding: 10px;
+            gap: 30px;
+        }
+
+        li:nth-child(odd) {
+            background-color: purple;
+        }
+
+        li:nth-child(even) {
+            background-color: cyan;
+        }
+
+        input,
+        select,
+        button {
+            width: 150px;
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        input {
+            width: 136px;
+        }
+
+        .salvar {
+            background-color: aquamarine;
+        }
+
+        .excluir {
+            background-color: crimson;
+        }
+
+        @media screen and (max-width:500px) {
+            h1 {
+                font-size: 50px;
+            }
+
+            div {
+                display: flex;
+                flex-direction: column;
+            }
+
+            ol {
+                padding: 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <h1>Lista de Tarefas</h1>
+
+    <!-- <form action="http://localhost:8080/tarefa" method="POST"> -->
+
+    <div>
+        <input type="text" placeholder="Digite a tarefa" id="tarefa" required>
+
+        <select name="" id="categoria">
+
+            <option value="casa">Casa</option>
+            <option value="trabalho">Trabalho</option>
+
+        </select>
+
+        <button class="salvar" onclick="salvarTarefa()">Salvar Tarefa</button>
+
+    </div>
+
+    <!-- </form> -->
+
+    <ol id="listaDeTarefas">
+
+    </ol>
+
+    <script>
+
+        const olHTML = document.getElementById("listaDeTarefas")
+
+        async function baixarTarefas() {  //async identifica uma função asincrona(avança linha a linha)
+
+            var tarefas = await fetch("https://tarefas-elfb.onrender.com/home") // faz a conexão
+            //Fetch é uma conexão, uma requisição que pode ser feita a uma URL
+
+            var listaDeTarefas = await tarefas.json() //converte a resposta para JSON
+
+            olHTML.innerHTML = ""
+
+            listaDeTarefas.forEach((tarefa, index) => {
+
+                const li = document.createElement("li")
+
+                if (tarefa.categoria == "casa") {
+                    li.innerHTML = "🏠" + tarefa.tarefa + `<button class="excluir" onclick="excluirTarefa(${tarefa.id})">Excluir</button>`
+
+                }
+
+                else if (tarefa.categoria == "trabalho") {
+                    li.innerHTML = "🧑‍💼" + tarefa.tarefa + `<button class="excluir" onclick="excluirTarefa(${tarefa.id})">Excluir</button>`
+
+                }
+
+                olHTML.appendChild(li)
+
+            })
+        }
+
+        async function salvarTarefa() {
+
+            let tarefa = document.getElementById("tarefa").value
+            let categoria = document.getElementById("categoria").value
+            let req = await fetch("https://tarefas-elfb.onrender.com/home", {
+                method: "POST", //metodo HTTP POST
+                headers: {
+                    "Content-Type": "application/json", //especifica q o conteudo é um OBJ JS
+                },
+
+                body: JSON.stringify({ tarefa, categoria })
+                //converte o VALUE recebido do INPUT para o CORPO DA REQUISIÇÃO
+
+            })
+
+            baixarTarefas()
+
+        }
+
+        async function excluirTarefa(index) {
+
+            let req = await fetch("https://tarefas-elfb.onrender.com/home" + index, { method: "DELETE" })
+            baixarTarefas()
+        }
+
+        baixarTarefas()
+
+    </script>
+
+</body>
+
+</html>
