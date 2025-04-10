@@ -50,6 +50,6 @@ app.delete("/tarefa/:id", (req,res)=>{
 })
 
 app.get("/home",(req,res)=>{
-    res.sendFile(path.join(__dirname,"index.html"))
+    res.sendFile(path.join("index.html",{root:_dirname})
 })
 //resposta enviada do arquivo, sendo index.html (o arquivo), root identifica o servidor da pasta raiz, dirname sendo o diretorio da pasta atual
