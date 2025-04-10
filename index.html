@@ -108,7 +108,7 @@
 
         async function baixarTarefas() {  //async identifica uma função asincrona(avança linha a linha)
 
-            var tarefas = await fetch("https://tarefas-zwl4.onrender.com/home/") // faz a conexão
+            var tarefas = await fetch("https://tarefas-zwl4.onrender.com/home") // faz a conexão
             //Fetch é uma conexão, uma requisição que pode ser feita a uma URL
 
             var listaDeTarefas = await tarefas.json() //converte a resposta para JSON
